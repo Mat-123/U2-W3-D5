@@ -32,7 +32,7 @@ fetch("https://striveschool-api.herokuapp.com/api/product/", {
 
       const img = document.createElement("img");
       img.style = "max-height: 150px; object-fit: cover";
-      img.className = "mx-1 my-2";
+      img.className = "my-2";
 
       const imgUrl = nft.imageUrl;
 
@@ -56,22 +56,26 @@ fetch("https://striveschool-api.herokuapp.com/api/product/", {
 
       p.innerText = nftPrice + " ETH";
 
+      const buttonContainer = document.createElement("div");
+      buttonContainer.className = "card-body d-flex justify-content-between";
+
       const moreInfoButton = document.createElement("a");
-      moreInfoButton.href = `./product.html?nftId=${nft._id}`;
+      moreInfoButton.href = `./product.html?id=${nft._id}`;
       moreInfoButton.className = "btn btn-primary me-auto";
       moreInfoButton.innerText = "Scopri piu info";
 
       const modifyButton = document.createElement("a");
-      modifyButton.href = `./backoffice.html?nftId=${nft._id}`;
+      modifyButton.href = `./backoffice.html?id=${nft._id}`;
       modifyButton.className = "btn btn-warning";
       modifyButton.innerText = "Modifica";
 
       cardBody.appendChild(nftBodyTitle);
       cardBody.appendChild(p);
-      cardBody.appendChild(moreInfoButton);
-      cardBody.appendChild(modifyButton);
+      buttonContainer.appendChild(moreInfoButton);
+      buttonContainer.appendChild(modifyButton);
       productCard.appendChild(img);
       productCard.appendChild(cardBody);
+      productCard.appendChild(buttonContainer);
       productContainer.appendChild(productCard);
     });
   })

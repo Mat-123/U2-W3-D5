@@ -1,22 +1,28 @@
-const nftId = new URLSearchParams(window.location.search).get("productId");
+const id = new URLSearchParams(window.location.search).get("id");
 
-const URL = nftId
-  ? "https://striveschool-api.herokuapp.com/api/product/" + nftId
+const URL = id
+  ? "https://striveschool-api.herokuapp.com/api/product/" + id
   : "https://striveschool-api.herokuapp.com/api/product/";
-const method = nftId ? "PUT" : "POST";
+const method = id ? "PUT" : "POST";
 
 window.onload = () => {
   const titleAlt = document.getElementById("title-alt");
   const submitBtn = document.querySelector("button[type='submit']");
   const deleteBtn = document.getElementById("deleteBtn");
 
-  if (nftId) {
+  if (id) {
     titleAlt.innerText = "— Modifica il tuo NFT";
     submitBtn.innerText = "Modifica NFT";
     submitBtn.classList.add("btn-success");
     deleteBtn.classList.remove("d-none");
 
-    fetch(URL)
+    fetch(URL, {
+      method,
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWUxYTlhOTRjNTllYzAwMTk5MGQ3NDYiLCJpYXQiOjE3MDkyODc4NTAsImV4cCI6MTcxMDQ5NzQ1MH0.2dEs1ZUQujaVeRo7OKgwkYZXMWxOusac5xHNW-CQTpo",
+      },
+    })
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -90,7 +96,7 @@ const handleSubmit = (e) => {
       }
     })
     .then((newNft) => {
-      if (nftId) {
+      if (id) {
         alert("NFT con id: " + newNft._id + " e' stato modificato con successo.");
       } else {
         alert("NFT con id: " + newNft._id + " e' stato creato con successo.");
@@ -106,12 +112,29 @@ const handleDelete = () => {
   );
 
   if (confirmed) {
-    fetch(URL, { method: "DELETE" })
-      .then(resp.json())
+    fetch(URL, {
+      method: "DELETE",
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWUxYTlhOTRjNTllYzAwMTk5MGQ3NDYiLCJpYXQiOjE3MDkyODc4NTAsImV4cCI6MTcxMDQ5NzQ1MH0.2dEs1ZUQujaVeRo7OKgwkYZXMWxOusac5xHNW-CQTpo",
+      },
+    })
+      .then((resp) => resp.json())
       .then((deletedNft) => {
         alert("NFT " + deletedNft.name + " e' stato eliminato correttamente");
 
         window.location.assign("../index.html");
       });
+  }
+};
+
+const emptyForm = () => {
+  const emptied = confirm("Stai per svuotare completamente il form, vuoi procedere?");
+  if (emptied) {
+    document.getElementById("name").value = "";
+    document.getElementById("description").value = "";
+    document.getElementById("brand").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("imageUrl").value = "";
   }
 };
